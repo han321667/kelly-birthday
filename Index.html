@@ -2,89 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday Kelly!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Open+Sans&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Kelly 💖</title>
   <style>
     body {
+      background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      background: linear-gradient(135deg, #ffe0f0, #e0f7ff);
-      color: #333;
+      padding: 0;
       text-align: center;
-      padding: 20px;
     }
     h1 {
-      font-family: 'Pacifico', cursive;
-      font-size: 3rem;
-      color: #ff4081;
-      margin-top: 40px;
+      color: #b8005c;
+      padding: 20px;
+      font-size: 2em;
     }
-    .section {
-      margin: 40px auto;
-      max-width: 700px;
-      background: white;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    .slideshow-container {
+      position: relative;
+      max-width: 90%;
+      margin: auto;
     }
-    .gallery img, .video video {
-      width: 100%;
-      max-width: 500px;
-      border-radius: 10px;
-      margin-top: 15px;
-    }
-    .surprise-btn {
-      background-color: #ff4081;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 1rem;
-      margin-top: 20px;
-    }
-    .hidden-message {
+    .slide {
       display: none;
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 1.2rem;
+      width: 100%;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
+  <h1>To Kelly – My Greatest Treasure in Life 💖</h1>
 
-  <h1>🎉 Happy Birthday Kelly! 🎂</h1>
-
-  <div class="section">
-    <h2>💌 A Letter Just for You</h2>
-    <p>
-      To My Dearest Kelly,<br><br>
-      Happy Birthday, my one and only treasure.<br><br>
-      You’re not just my best friend — you are my safe space, my strength, and my biggest joy. Whether I’m at my lowest or bursting with happiness, you’re the one I turn to. I depend on you more than you know, and I thank the universe every day for giving me a friend like you.<br><br>
-      Thank you for always being there. I hope this surprise reminds you just how loved and cherished you are.<br><br>
-      With all my heart,<br>
-      [Your Name]
-    </p>
+  <div class="slideshow-container">
+    <!-- Slides will be loaded here -->
+    <!-- Example:
+    <div class="slide">
+      <img src="images/photo1.jpg" alt="Memory 1">
+    </div>
+    -->
   </div>
 
-  <div class="section gallery">
-    <h2>📸 Our Memories</h2>
-    <p>(Upload photos here)</p>
-    <img src="your-photo-link.jpg" alt="Photo of you and Kelly">
-  </div>
+  <!-- Background music -->
+  <audio autoplay loop>
+    <source src="perfect.mp3" type="audio/mp3">
+  </audio>
+  <audio autoplay loop>
+    <source src="kelly2.mp3" type="audio/mp3">
+  </audio>
 
-  <div class="section video">
-    <h2>🎥 A Special Video</h2>
-    <p>(Upload video here)</p>
-    <video controls src="your-video-link.mp4"></video>
-  </div>
+  <script>
+    // Array of image filenames
+    const imageFilenames = [
+      "IMG_001.jpg",
+      "IMG_002.jpg",
+      // Add all your image filenames here
+    ];
 
-  <div class="section">
-    <h2>🎁 Your Surprise Awaits</h2>
-    <button class="surprise-btn" onclick="document.getElementById('surprise').style.display='block'">Click to Reveal</button>
-    <p id="surprise" class="hidden-message">You are the brightest light in my life, and you always will be. ❤️</p>
-  </div>
+    const slideshowContainer = document.querySelector('.slideshow-container');
 
+    imageFilenames.forEach((filename) => {
+      const slideDiv = document.createElement('div');
+      slideDiv.classList.add('slide');
+      const img = document.createElement('img');
+      img.src = filename;
+      img.alt = 'Memory';
+      slideDiv.appendChild(img);
+      slideshowContainer.appendChild(slideDiv);
+    });
+
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+      const slides = document.getElementsByClassName("slide");
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {
+        slideIndex = 1;
+      }
+      if (slides[slideIndex - 1]) slides[slideIndex - 1].style.display = "block";
+      setTimeout(showSlides, 3000); // Change image every 3 seconds
+    }
+  </script>
 </body>
 </html>
