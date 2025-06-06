@@ -2,95 +2,225 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Happy Birthday Kelly 💖</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
+
     body {
-      background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      padding: 0;
+      background: linear-gradient(to right, #ffe0ec, #ffe9f0);
+      font-family: 'Quicksand', sans-serif;
+      overflow-x: hidden;
       text-align: center;
     }
     h1 {
-      color: #b8005c;
+      font-family: 'Pacifico', cursive;
+      color: #d6336c;
       padding: 20px;
+      font-size: 2.5em;
+    }
+    .countdown {
       font-size: 2em;
+      color: #d6336c;
+      margin: 20px;
     }
     .slideshow-container {
-      position: relative;
       max-width: 90%;
       margin: auto;
+      position: relative;
     }
     .slide {
       display: none;
-      width: 100%;
+      animation: fade 2s ease-in-out;
+    }
+    @keyframes fade {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
     }
     img {
       max-width: 100%;
-      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .message {
+      font-size: 1.7em;
+      padding: 60px 20px;
+      color: #aa1f4d;
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      margin: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .replay-button {
+      display: none;
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      color: white;
+      background-color: #d6336c;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .replay-button:hover {
+      background-color: #aa1f4d;
     }
     audio {
       display: none;
+    }
+    canvas {
+      position: fixed;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999;
     }
   </style>
 </head>
 <body>
   <h1>To Kelly – My Greatest Treasure in Life 💖</h1>
+  <div class="countdown" id="countdown">Loading surprise in 5...</div>
+  <div class="slideshow-container" id="slideshow" style="display:none"></div>
+  <button class="replay-button" id="replayBtn">Replay Surprise</button>
 
-  <div class="slideshow-container">
-    <!-- Slides will be loaded here -->
-    <!-- Example:
-    <div class="slide">
-      <img src="images/photo1.jpg" alt="Memory 1">
-    </div>
-    -->
-  </div>
+  <audio autoplay loop id="bgMusic1">
+    <source src="Ed_Sheeran.mp3" type="audio/mpeg" />
+  </audio>
+  <audio autoplay loop id="bgMusic2">
+    <source src="Kelly.mp3" type="audio/mpeg" />
+  </audio>
 
-  <!-- Background music -->
-  <audio autoplay loop>
-    <source src="perfect.mp3" type="audio/mp3">
-  </audio>
-  <audio autoplay loop>
-    <source src="kelly2.mp3" type="audio/mp3">
-  </audio>
+  <canvas id="confetti"></canvas>
 
   <script>
-    // Array of image filenames
     const imageFilenames = [
-      "IMG_001.jpg",
-      "IMG_002.jpg",
-      // Add all your image filenames here
+      "A.jpg","B.jpg","C.jpg","D.jpg","E.jpg","F.jpg","G.jpg","H.jpg","I.jpg","J.jpg",
+      "K.jpg","L.jpg","M.jpg","N.jpg","O.jpg","P.jpg","Q.jpg","R.jpg","S.jpg","T.jpg",
+      "U.jpg","V.jpg","W.jpg","X.jpg","Y.jpg","Z.jpg",
+      "a1.jpg","a2.jpg","a3.jpg","a4.jpg","a5.jpg","a6.jpg","a7.jpg","a8.jpg","a9.jpg",
+      "a10.jpg","a11.jpg","a12.jpg","a13.jpg","a14.jpg","a15.jpg","a16.jpg","a17.jpg","a18.jpg"
     ];
 
-    const slideshowContainer = document.querySelector('.slideshow-container');
+    const messages = [
+      "To my dearest Kelly, my biggest treasure in life 💖",
+      "You’re the one I depend on, in joy and in pain.",
+      "Your smile heals, your words lift, your love stays.",
+      "Through every storm, you’ve been my sunshine ☀️",
+      "Your presence brings peace. Your laughter is home.",
+      "I’m grateful for every moment shared with you.",
+      "You’ve stood by me even when I didn’t deserve it.",
+      "Your heart is gold — kind, strong, and full of love.",
+      "There’s no one like you. You are irreplaceable.",
+      "Happy Birthday, Kelly. You are loved more than words."
+    ];
 
-    imageFilenames.forEach((filename) => {
-      const slideDiv = document.createElement('div');
-      slideDiv.classList.add('slide');
-      const img = document.createElement('img');
-      img.src = filename;
-      img.alt = 'Memory';
-      slideDiv.appendChild(img);
-      slideshowContainer.appendChild(slideDiv);
-    });
+    const container = document.getElementById("slideshow");
+    const slides = [];
+    let imageIndex = 0;
+    let messageIndex = 0;
 
-    let slideIndex = 0;
-    showSlides();
+    for (let i = 0; i < imageFilenames.length + messages.length; i++) {
+      const slide = document.createElement("div");
+      slide.className = "slide";
 
-    function showSlides() {
-      const slides = document.getElementsByClassName("slide");
-      for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
+      if (i % 5 === 4 && messageIndex < messages.length) {
+        const msg = document.createElement("div");
+        msg.className = "message";
+        msg.innerText = messages[messageIndex++];
+        slide.appendChild(msg);
+      } else if (imageIndex < imageFilenames.length) {
+        const img = document.createElement("img");
+        img.src = imageFilenames[imageIndex++];
+        img.alt = "Memory";
+        slide.appendChild(img);
       }
-      slideIndex++;
-      if (slideIndex > slides.length) {
-        slideIndex = 1;
+
+      slides.push(slide);
+      container.appendChild(slide);
+    }
+
+    let slideIndex = -1;
+    let interval;
+
+    const showSlides = () => {
+      slides.forEach(slide => slide.style.display = "none");
+      slideIndex = (slideIndex + 1) % slides.length;
+      slides[slideIndex].style.display = "block";
+      if (slideIndex === slides.length - 1) {
+        clearInterval(interval);
+        document.getElementById("replayBtn").style.display = 'inline-block';
       }
-      if (slides[slideIndex - 1]) slides[slideIndex - 1].style.display = "block";
-      setTimeout(showSlides, 3000); // Change image every 3 seconds
+    };
+
+    const startSlideshow = () => {
+      slideIndex = -1;
+      interval = setInterval(showSlides, 3500);
+    }
+
+    document.getElementById("replayBtn").onclick = () => {
+      document.getElementById("replayBtn").style.display = 'none';
+      slides.forEach(slide => slide.style.display = "none");
+      startSlideshow();
+    }
+
+    // Countdown and start
+    let countdownNum = 5;
+    const countdownEl = document.getElementById("countdown");
+    const countdown = setInterval(() => {
+      countdownNum--;
+      if (countdownNum === 0) {
+        clearInterval(countdown);
+        countdownEl.style.display = 'none';
+        document.getElementById("slideshow").style.display = 'block';
+        startSlideshow();
+        launchConfetti();
+      } else {
+        countdownEl.innerText = `Loading surprise in ${countdownNum}...`;
+      }
+    }, 1000);
+
+    // Confetti 🎉
+    function launchConfetti() {
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confetti = Array.from({ length: 150 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 10 + 2,
+        color: `hsl(${Math.random() * 360}, 100%, 70%)`
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confetti.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        });
+        update();
+      }
+
+      function update() {
+        confetti.forEach(p => {
+          p.y += Math.cos(p.d) + 2;
+          p.x += Math.sin(p.d);
+          if (p.y > canvas.height) {
+            p.y = 0;
+            p.x = Math.random() * canvas.width;
+          }
+        });
+      }
+
+      setInterval(draw, 30);
     }
   </script>
 </body>
